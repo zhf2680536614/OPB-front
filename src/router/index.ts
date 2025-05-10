@@ -25,8 +25,8 @@ router.beforeEach((to, from) => {
         console.log('你还未登录');
         return '/login'
     }
-    console.log('to',' : ' ,to);
     console.log('from',' : ',from);
+    console.log('to',' : ' ,to);
     return true
 })
 

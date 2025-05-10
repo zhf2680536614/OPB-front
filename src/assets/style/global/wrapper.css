@@ -1,0 +1,5 @@
+.wrapper {
+    display: block;
+    margin: 0 auto;    /* 水平居中 */
+    box-sizing: border-box; /* 防止内边距影响宽度 */
+}
