@@ -7,9 +7,9 @@
 
 /* 设置网页统一的字体大小、行高、字体系列相关属性 */
 body {
-  font: 1vw  "Microsoft Yahei",
+  font: 1vw "Microsoft Yahei",
     "Hiragino Sans GB", "Heiti SC", "WenQuanYi Micro Hei", sans-serif;
-  color: #333;
+  background-color: rgba(51, 51, 51, 0.1);
 }
 
 /* 去除列表默认样式 */
@@ -52,4 +52,3 @@ h5,
 h6 {
   font-weight: 400;
 }
-

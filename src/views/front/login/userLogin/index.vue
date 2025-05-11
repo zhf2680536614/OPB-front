@@ -43,6 +43,13 @@ const username = ref('')
 
 const password = ref('')
 
+const init = () => {
+    username.value = ''
+    password.value = ''
+}
+
+init()
+
 watch(username, (newUsername) => {
     emit('updateUsername', newUsername)
 })

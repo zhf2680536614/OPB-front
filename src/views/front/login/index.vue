@@ -95,7 +95,7 @@ const login = async (obj: string) => {
 </template>
 <style scoped lang="less">
 .wrapper {
-    margin-top: 2vw;
+    margin-top: 1.5vw;
     width: 80vw;
     text-align: center;
 
