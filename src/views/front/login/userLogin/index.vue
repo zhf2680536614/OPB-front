@@ -73,18 +73,19 @@ const userLogin = () => {
             <el-form class="form" :rules="rules" :model="loginData" ref="userFormRef">
                 <div class="prop">账号</div>
                 <el-form-item prop="username">
-                    <el-input v-model="username" clearable />
+                    <el-input placeholder="请输入账号" v-model="username" clearable />
                 </el-form-item>
                 <div class="prop">密码</div>
                 <el-form-item prop="password">
-                    <el-input v-model="password" type="password" show-password clearable />
+                    <el-input placeholder="请输入密码" v-model="password" type="password" show-password clearable />
                 </el-form-item>
             </el-form>
             <el-button class="button" type="primary" @click="userLogin">Login</el-button>
-            <h3 class="text_two"><a href="">没有账号？注册一个</a> | <a href="">忘记密码</a></h3>
+            <h3 class="text_two"><router-link to="/register">没有账号？注册一个</router-link> | <router-link
+                    to="">忘记密码</router-link></h3>
         </div>
         <div class="login_right">
-            <img class="login_top" src="../../../../assets/vue.svg">
+            <img class="login_top" src="../../../../assets/right.jpg">
             <div class="login_bottom" @click="showButton">
                 管理员登录
             </div>
@@ -118,7 +119,13 @@ const userLogin = () => {
         align-items: center;
         width: 24.5vw;
         height: 35vw;
-        background-color: rgba(143, 215, 252, 0.5);
+        // background-image: url(../../../../assets/bgc.jpg);
+        background-image: linear-gradient(to right,
+                    #93ffcb,
+                    #c3ffe2);
+
+        background-repeat: no-repeat;
+        background-size: cover;
         border-radius: 2%;
 
         .text_one {
@@ -144,6 +151,7 @@ const userLogin = () => {
             width: 20vw;
             height: 2.5vw;
             font-size: 1.2vw;
+
         }
 
         .text_two {
@@ -167,20 +175,22 @@ const userLogin = () => {
 
         .login_top {
             height: 29.5vw;
-            border: 0.5vw solid #b1e8ff;
             border-radius: 0.3vw;
+            opacity: 0.9;
         }
 
         .login_bottom {
             margin-top: 1vw;
             height: 4.5vw;
             line-height: 4.5vw;
-            background-color: #b1e8ff;
+            background-image: linear-gradient(to left,
+                    #93ffcb,
+                    #c3ffe2);
             border-radius: 0.3vw;
             font-size: 1.2vw;
             font-weight: 600;
             cursor: pointer;
-            transition: all 0.3;
+            transition: all 0.5s;
 
             &:hover {
                 opacity: 0.8;

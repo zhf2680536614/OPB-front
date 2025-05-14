@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import { useUserStore } from '../store'
 import Login from '@/views/front/login/index.vue'
+import Register from '@/views/front/register/index.vue'
 
 const routes: any[] = [
     {
@@ -11,6 +12,11 @@ const routes: any[] = [
         path:'/login',
         name:'login',
         component: Login
+    },
+    {
+        path:'/register',
+        name:'register',
+        component:Register
     }
 ]
 
@@ -20,11 +26,11 @@ const router = createRouter({
 })
 
 router.beforeEach((to, from) => {
-    const userStore = useUserStore()
-    if (userStore.token && to.path !== '/login') {
-        console.log('你还未登录');
-        return '/login'
-    }
+    // const userStore = useUserStore()
+    // if (userStore.token && to.path !== '/login' ) {
+    //     console.log('你还未登录');
+    //     return '/login'
+    // }
     console.log('from',' : ',from);
     console.log('to',' : ' ,to);
     return true

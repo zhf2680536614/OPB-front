@@ -60,7 +60,7 @@ const manageLogin = () => {
 <template>
     <div class="login">
         <div class="login_right">
-            <img class="login_top" src="../../../../assets/vue.svg">
+            <img class="login_top" src="../../../../assets/left.jpg">
             <div class="login_bottom" @click="showButton">
                 用户登录
             </div>
@@ -72,15 +72,16 @@ const manageLogin = () => {
             <el-form ref="manageFormRef" class="form" :rules="rules" :model="loginData">
                 <div class="prop">账号</div>
                 <el-form-item prop="username">
-                    <el-input v-model="username" clearable />
+                    <el-input v-model="username" placeholder="请输入账号" clearable />
                 </el-form-item>
                 <div class="prop">密码</div>
                 <el-form-item prop="password">
-                    <el-input v-model="password" type="password" show-password clearable />
+                    <el-input v-model="password" placeholder="请输入密码" type="password" show-password clearable />
                 </el-form-item>
             </el-form>
             <el-button class="button" type="primary" @click="manageLogin">Login</el-button>
-            <h3 class="text_two"><a href="">没有账号？注册一个</a> | <a href="">忘记密码</a></h3>
+            <h3 class="text_two"><router-link to="/register">没有账号？注册一个</router-link> | <router-link
+                    to="">忘记密码</router-link></h3>
         </div>
     </div>
 
@@ -111,7 +112,9 @@ const manageLogin = () => {
         align-items: center;
         width: 24.5vw;
         height: 35vw;
-        background-color: rgba(143, 215, 252, 0.5);
+        background-image: linear-gradient(to left,
+                #88ccff,
+                #bde8ff);
         border-radius: 2%;
 
         .text_one {
@@ -160,7 +163,6 @@ const manageLogin = () => {
 
         .login_top {
             height: 29.5vw;
-            border: 0.5vw solid #b1e8ff;
             border-radius: 0.3vw;
         }
 
@@ -168,7 +170,9 @@ const manageLogin = () => {
             margin-top: 1vw;
             height: 4.5vw;
             line-height: 4.5vw;
-            background-color: #b1e8ff;
+            background-image: linear-gradient(to left,
+                    #88ccff,
+                    #bde8ff);
             border-radius: 0.3vw;
             font-size: 1.2vw;
             font-weight: 600;

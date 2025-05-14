@@ -4,7 +4,9 @@ import UserLogin from './userLogin/index.vue'
 import ManageLogin from './manageLogin/index.vue'
 import type { Login } from '@/type/login'
 import { ElMessage, type FormRules } from 'element-plus'
-import { userLogin } from '@/api/login'
+import { userLogin, manageLogin } from '@/api/login'
+import { loaclCache } from '@/utils/cache'
+import { Authentication, Token } from '@/config/constants/Token'
 
 const loading = ref(false)
 
@@ -56,8 +58,10 @@ const login = async (obj: string) => {
         if (isValid) {
             loading.value = true
             const res = await userLogin(loginData.value)
-            ElMessage.success("登陆成功")
-            console.log(res);
+            if (res.data.code === 1) {
+                ElMessage.success("登陆成功")
+                loaclCache.setCache(Authentication, res.data.data.authentication)
+            }
             loading.value = false
         }
 
@@ -66,9 +70,11 @@ const login = async (obj: string) => {
         const isValid = await manageLoginRef.value?.validate();
         if (isValid) {
             loading.value = true
-            const res = await userLogin(loginData.value)
-            ElMessage.success("登陆成功")
-            console.log(res);
+            const res = await manageLogin(loginData.value)
+            if (res.data.code === 1) {
+                ElMessage.success("登陆成功")
+                loaclCache.setCache(Token, res.data.data.token)
+            }
             loading.value = false
         }
     }
@@ -76,47 +82,74 @@ const login = async (obj: string) => {
 
 </script>
 <template>
-    <div class="wrapper" v-loading="loading">
-        <img src="../../../assets/vue.svg" class="logo wrapper" alt="">
-        <h3 class="text_h3">【ATEY · 环境保护系统】</h3>
-        <h4 class="text_h4">绿色农产汇聚处，健康生活新起点</h4>
-        <div class="login_register wrapper">
+    <div class="bgc">
+        <div class="wrapper" v-loading="loading">
+            <img src="../../../assets/vue.svg" class="logo wrapper" alt="">
+            <h3 class="text_h3">Green Pluse · 环境保护系统
+                <div class="text_h4">
+                    Let the gentle breeze of green blow through the land
+                </div>
+            </h3>
+            <div class="login_register wrapper">
 
-            <user-login ref="userLoginRef" v-show="show" :show="show" @change-show="changeShow" :loginData="loginData"
-                :rules="rules" @update-username="updateUsername" @update-password="updatePassword"
-                @user-login="login" />
+                <user-login ref="userLoginRef" v-show="show" :show="show" @change-show="changeShow"
+                    :loginData="loginData" :rules="rules" @update-username="updateUsername"
+                    @update-password="updatePassword" @user-login="login" />
 
-            <manage-login ref="manageLoginRef" v-show="!show" :show="show" @change-show="changeShow"
-                :loginData="loginData" :rules="rules" @update-username="updateUsername"
-                @update-password="updatePassword" @manage-login="login" />
+                <manage-login ref="manageLoginRef" v-show="!show" :show="show" @change-show="changeShow"
+                    :loginData="loginData" :rules="rules" @update-username="updateUsername"
+                    @update-password="updatePassword" @manage-login="login" />
 
+            </div>
         </div>
     </div>
+
 </template>
 <style scoped lang="less">
-.wrapper {
-    margin-top: 1.5vw;
-    width: 80vw;
-    text-align: center;
+:global {
+    @keyframes fontmove {
+        from {
+            margin-top: 1vw;
+            opacity: 0;
+        }
 
-    h3 {
-        font-size: 2.5vw;
+        to {
+            margin-top: 0;
+            opacity: 1;
+        }
     }
+}
 
-    h4 {
-        font-size: 1.5vw;
-        margin-top: 1vw;
-    }
+.bgc {
+    .wrapper {
+        margin-top: 1.5vw;
+        width: 80vw;
+        text-align: center;
 
-    .logo {
-        width: 5vw;
-        height: 5vw;
-    }
+        .text_h3 {
+            font-size: 2.5vw;
+            line-height: 3vw;
+            animation: fontmove 1.2s;
 
-    .login_register {
-        width: 40vw;
-        height: 35vw;
-        transition: all 1s;
+            .text_h4 {
+                font-size: 1vw;
+                font-weight: 300;
+                line-height: 3vw;
+                animation: fontmove 1.2s;
+            }
+        }
+
+
+        .logo {
+            width: 5vw;
+            height: 5vw;
+        }
+
+        .login_register {
+            width: 40vw;
+            height: 35vw;
+            transition: all 1s;
+        }
     }
 }
 </style>

@@ -1,5 +1,9 @@
-import axios from 'axios'
-import BaseUrl from '../config/service';
+import axios, { type AxiosResponse } from 'axios'
+import BaseUrl from '../config/service'
+import { ElMessage } from 'element-plus'
+import type { ApiResponse } from '@/type/ApiResponse'
+import { loaclCache } from '@/utils/cache'
+import { Authentication, Token } from '@/config/constants/Token'
 
 const instance = axios.create({
     baseURL: BaseUrl,
@@ -10,6 +14,22 @@ const instance = axios.create({
 instance.interceptors.request.use(
     (config) => {
         //携带token
+
+        const requestUrl = config.url || ''//请求的Url
+
+        if (requestUrl.includes('/user/')) {
+            const authentication = loaclCache.getCache(Authentication)
+            if (config.headers && authentication) {
+                config.headers!.Authentication = authentication
+            }
+        }
+        if (requestUrl.includes('/manage/')) {
+            const token = loaclCache.getCache(Token)
+            if (config.headers && Token) {
+                config.headers!.Token = token
+            }
+        }
+
         return config;
     },
     (error) => {
@@ -17,8 +37,13 @@ instance.interceptors.request.use(
     }
 )
 
+
+
 instance.interceptors.response.use(
-    (res) => {
+    (res: AxiosResponse<ApiResponse>) => {
+        if (res.data.code === 0) {
+            ElMessage.error(res.data.msg)
+        }
         return res
     },
     (error) => {
