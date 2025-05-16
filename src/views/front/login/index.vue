@@ -7,6 +7,9 @@ import { ElMessage, type FormRules } from 'element-plus'
 import { userLogin, manageLogin } from '@/api/login'
 import { loaclCache } from '@/utils/cache'
 import { Authentication, Token } from '@/config/constants/Token'
+import { useRouter } from 'vue-router'
+
+const router = useRouter()
 
 const loading = ref(false)
 
@@ -61,6 +64,7 @@ const login = async (obj: string) => {
             if (res.data.code === 1) {
                 ElMessage.success("登陆成功")
                 loaclCache.setCache(Authentication, res.data.data.authentication)
+                router.push('/')
             }
             loading.value = false
         }

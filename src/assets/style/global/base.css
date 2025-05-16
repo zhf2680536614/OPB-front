@@ -10,6 +10,7 @@ body {
   font: 1vw "Microsoft Yahei",
     "Hiragino Sans GB", "Heiti SC", "WenQuanYi Micro Hei", sans-serif;
   background-color: rgba(195, 255, 201, 0.1);
+  overflow-x: hidden;
 }
 
 /* 去除列表默认样式 */

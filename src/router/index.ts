@@ -2,11 +2,11 @@ import { createRouter, createWebHistory } from 'vue-router'
 import { useUserStore } from '../store'
 import Login from '@/views/front/login/index.vue'
 import Register from '@/views/front/register/index.vue'
-
+import Consult from "@/views/front/consult/index.vue"
 const routes: any[] = [
     {
         path:'/',
-        redirect: '/login'
+        redirect: '/consult'
     },
     {
         path:'/login',
@@ -17,6 +17,11 @@ const routes: any[] = [
         path:'/register',
         name:'register',
         component:Register
+    },
+    {
+        path:'/consult',
+        name:"consult",
+        component:Consult
     }
 ]
 

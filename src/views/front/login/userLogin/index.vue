@@ -85,7 +85,7 @@ const userLogin = () => {
                     to="">忘记密码</router-link></h3>
         </div>
         <div class="login_right">
-            <img class="login_top" src="../../../../assets/right.jpg">
+            <img class="login_top" src="../../../../assets/image/login/right.jpg">
             <div class="login_bottom" @click="showButton">
                 管理员登录
             </div>
@@ -121,8 +121,8 @@ const userLogin = () => {
         height: 35vw;
         // background-image: url(../../../../assets/bgc.jpg);
         background-image: linear-gradient(to right,
-                    #93ffcb,
-                    #c3ffe2);
+                #93ffcb,
+                #c3ffe2);
 
         background-repeat: no-repeat;
         background-size: cover;

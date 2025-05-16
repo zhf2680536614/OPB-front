@@ -60,7 +60,7 @@ const manageLogin = () => {
 <template>
     <div class="login">
         <div class="login_right">
-            <img class="login_top" src="../../../../assets/left.jpg">
+            <img class="login_top" src="../../../../assets/image/login/left.jpg">
             <div class="login_bottom" @click="showButton">
                 用户登录
             </div>
