@@ -39,7 +39,7 @@ const rightMove = () => {
 <template>
     <div class="main">
         <div class="big_title">
-            Hot Consult
+            热点资讯 - <span>Hot Consult</span>
         </div>
         <div class="list">
             <ul ref="ulRef">
@@ -86,17 +86,26 @@ const rightMove = () => {
         height: 3vw;
         line-height: 3vw;
         font-size: 2vw;
-        font-weight: 550;
+        color: rgba(51, 51, 51, 0.95);
+
+        span {
+            display: inline-block;
+            height: 3vw;
+            line-height: 3vw;
+            vertical-align: middle;
+            font-size: 1vw;
+            color: rgba(51, 51, 51, 0.9);
+        }
     }
 
     .list {
         position: absolute;
         top: 4vw;
+        left: 4vw;
         height: 28vw;
 
         ul {
             display: inline-flex;
-            margin-left: 4vw;
             height: 28vw;
             transition: all 0.8s;
 
