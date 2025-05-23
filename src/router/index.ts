@@ -1,4 +1,3 @@
-import { pa } from 'element-plus/es/locales.mjs';
 import { createRouter, createWebHistory } from 'vue-router'
 
 const routes: any[] = [
@@ -41,6 +40,27 @@ const routes: any[] = [
                 component: () => import('@/views/front/about/index.vue')
             },
         ]
+    },
+    {
+        name: 'admin',
+        path: '/admin',
+        redirect: '/admin/article',
+        children: [
+            {
+                name: 'article',
+                path: 'article',
+                component: () => import('@/views/admin/article/index.vue')
+            }
+        ]
+    },
+    {
+        path: '/404',
+        name: '404',
+        component: () => import('@/views/error/404.vue')
+    },
+    {
+        path: '/:pathMatch(.*)*',
+        redirect: '/404'
     }
 ]
 

@@ -1,9 +1,8 @@
-<script lang="ts" setup>
+<script setup>
 import { ref, watch } from 'vue'
 import UserLogin from './userLogin/index.vue'
 import ManageLogin from './manageLogin/index.vue'
-import type { Login } from '@/type/login'
-import { ElMessage, type FormRules } from 'element-plus'
+import { ElMessage,} from 'element-plus'
 import { userLogin, manageLogin } from '@/api/login'
 import { loaclCache } from '@/utils/cache'
 import { Authentication, Token } from '@/config/constants/Token'
@@ -15,7 +14,7 @@ const loading = ref(false)
 
 const show = ref(true)
 
-const changeShow = (obj: boolean) => {
+const changeShow = (obj) => {
     show.value = obj
 }
 
@@ -24,14 +23,14 @@ watch(show, () => {
     loginData.value.password = ''
 })
 
-const loginData = ref<Login>(
+const loginData = ref(
     {
         username: '',
         password: ''
     }
 )
 
-const rules = ref<FormRules<Login>>({
+const rules = ref({
     username: [
         { required: true, message: '请输入用户名', trigger: 'blur' },
         { min: 6, max: 18, message: '用户名长度在 6 - 18 之间', trigger: 'blur' },
@@ -42,11 +41,11 @@ const rules = ref<FormRules<Login>>({
     ],
 })
 
-const updateUsername = (username: string) => {
+const updateUsername = (username) => {
     loginData.value.username = username
 }
 
-const updatePassword = (password: string) => {
+const updatePassword = (password) => {
     loginData.value.password = password
 }
 
@@ -54,7 +53,7 @@ const userLoginRef = ref<InstanceType<typeof UserLogin>>()
 const manageLoginRef = ref<InstanceType<typeof ManageLogin>>()
 
 
-const login = async (obj: string) => {
+const login = async (obj) => {
     if (obj === 'user') {
 
         const isValid = await userLoginRef.value?.validate();
@@ -78,6 +77,7 @@ const login = async (obj: string) => {
             if (res.data.code === 1) {
                 ElMessage.success("登陆成功")
                 loaclCache.setCache(Token, res.data.data.token)
+                router.push('/admin/article')
             }
             loading.value = false
         }

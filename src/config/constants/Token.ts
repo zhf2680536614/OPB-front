@@ -1,2 +1,2 @@
-export const Authentication = "Authentication"//用户凭证
-export const Token = "Token"//管理员凭证
+export const Authentication = 'authentication'//用户凭证
+export const Token = 'token'//管理员凭证
