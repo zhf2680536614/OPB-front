@@ -35,6 +35,8 @@ const rightMove = () => {
     movePosition.value = movePosition.value + 1;
 }
 
+const image = ref(new URL("../../../../assets/image/login/right.jpg", import.meta.url).href)
+
 </script>
 <template>
     <div class="main">
@@ -54,9 +56,11 @@ const rightMove = () => {
                     <div class="data">
                         2025.10.27
                     </div>
-                    <img class="image" src="../../../../assets/image/login/right.jpg" alt="">
+                    <v-lazy-image class="image" :src="image" alt="" />
                     <div class="button">
-                        Learn More →
+                        Learn More <el-icon class="icon">
+                            <Right />
+                        </el-icon>
                     </div>
                 </li>
             </ul>
@@ -229,6 +233,9 @@ const rightMove = () => {
                     transition: all 0.5s;
                     opacity: 0;
 
+                    .icon {
+                        vertical-align: middle;
+                    }
 
                     &:hover {
                         opacity: 0.7;

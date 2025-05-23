@@ -1,4 +1,11 @@
 <script setup>
+
+import { ref } from 'vue'
+
+const leftImage = ref(new URL('../../../../assets/image/login/right.jpg', import.meta.url).href)
+
+const mainImage = ref(new URL('../../../../assets/image/consult/cycle5.jpg', import.meta.url).href)
+
 </script>
 <template>
     <div class="main">
@@ -21,11 +28,11 @@
             </div>
         </div>
         <div class="bottom">
-            <img class="left" src="../../../../assets/image/login/right.jpg" alt="">
+            <v-lazy-image class="left" :src="leftImage" alt="" />
             <div class="right">
                 <ul>
                     <li v-for="(item, index) in 8" :key="index">
-                        <img class="image" src="../../../../assets/image/consult/cycle5.jpg" alt="">
+                        <v-lazy-image class="image" :src="mainImage" alt="" />
                         <div class="title">
                             资讯标题
                         </div>
@@ -135,6 +142,7 @@
     .bottom {
         display: flex;
         justify-content: space-between;
+        margin-top: 1vw;
         width: 99vw;
         height: 46vw;
 

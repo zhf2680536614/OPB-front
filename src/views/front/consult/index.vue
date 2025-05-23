@@ -15,15 +15,13 @@ import Footer from '@/components/front/footer.vue';
 
         <HotConsult class="hot_consult" />
 
-        <ConnnectGroup class="connect_group" />
-
         <CommonConsult class="common_consult" />
+
+        <ConnnectGroup class="connect_group" />
 
         <Footer class="footer" />
 
     </div>
-
-
 </template>
 <style lang="less" scoped>
 .container {
@@ -40,22 +38,22 @@ import Footer from '@/components/front/footer.vue';
 
     .hot_consult {
         position: absolute;
-        top: 34vw;
-    }
-
-    .connect_group {
-        position: absolute;
-        top: 68vw;
+        top: 35vw;
     }
 
     .common_consult {
         position: absolute;
-        top: 139vw;
+        top: 67vw;
+    }
+
+    .connect_group {
+        position: absolute;
+        top: 120vw;
     }
 
     .footer {
         position: absolute;
-        top: 190vw;
+        top: 189vw;
     }
 
 }

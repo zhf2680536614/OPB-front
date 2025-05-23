@@ -9,15 +9,10 @@ const buttonRef = ref()
 
 const handleScroll = () => {
     nextTick(() => {
-        if (window.scrollY >= window.innerHeight * 1.1 && window.scrollY <= window.innerHeight * 2) {
-            imgRef.value.style.width = '100vw'
+        if (window.scrollY >= window.innerHeight * 2) {
+            imgRef.value.$el.style.width = '100vw'
         } else {
-            imgRef.value.style.width = '92vw'
-        }
-        if (window.scrollY > window.innerHeight * 1.1 && window.scrollY < window.innerHeight * 1.2) {
-            let moveLength = -(window.scrollY / window.innerWidth * 100) + 61.9
-            joinRef.value.style.transform = `translateY(${moveLength}vw)`
-            buttonRef.value.style.transform = `translateX(-50%) translateY(${moveLength}vw)`
+            imgRef.value.$el.style.width = '92vw'
         }
     })
 }
@@ -31,6 +26,8 @@ onMounted(() => {
 onUnmounted(() => {
     window.removeEventListener('scroll', handleScroll)
 })
+
+const image = ref(new URL('../../../../assets/image/connect-group/connect3.jpg', import.meta.url).href)
 </script>
 
 <template>
@@ -45,7 +42,7 @@ onUnmounted(() => {
             Join us to protect green mountains and clear waters, and build an ecological home together
         </div>
         <div class="image">
-            <img ref="imgRef" src="../../../../assets/image/connect-group/connect3.jpg" alt="">
+            <v-lazy-image ref="imgRef" :src="image" alt="" />
         </div>
         <div ref="joinRef" class="join">
             <div class="welcome">
@@ -97,7 +94,7 @@ onUnmounted(() => {
 
     .image {
         position: absolute;
-        top: 12vw;
+        top: 10vw;
         width: 100vw;
         height: 58vw;
 
@@ -110,7 +107,7 @@ onUnmounted(() => {
 
     .join {
         position: absolute;
-        top: 32vw;
+        top: 30vw;
         left: 0;
         width: 100vw;
         font-size: 3.5vw;

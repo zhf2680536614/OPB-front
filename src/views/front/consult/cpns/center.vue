@@ -17,7 +17,7 @@ const cycles = ref([
     <div class="main">
         <el-carousel autoplay motion-blur class="carousel" trigger="click">
             <el-carousel-item v-for="(item, index) in cycles" :key="index" class="carousel-item">
-                <img :src=item alt="" class="image">
+                <v-lazy-image :src=item alt="" class="image" />
             </el-carousel-item>
         </el-carousel>
         <div class="text1">Environment Protect</div>
@@ -33,7 +33,7 @@ const cycles = ref([
         }
         to{
             margin-top: 0;
-            opacity: 1;
+            opacity: 0.9;
         }
     }
 }
