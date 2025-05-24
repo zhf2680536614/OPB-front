@@ -8,11 +8,11 @@ const props = defineProps({
     rules: Object
 })
 
-const userFormRef = ref()
+const manageFormRef = ref()
 
 const validate = () => {
     return new Promise((resolve) => {
-        userFormRef.value.validate((valid: any) => {
+        manageFormRef.value.validate((valid: any) => {
             resolve(valid)
         })
     })
@@ -27,13 +27,13 @@ interface LoginFormExposed {
 defineExpose<LoginFormExposed>({
     validate: async () => {
         return new Promise((resolve) => {
-            userFormRef.value?.validate((valid: any) => resolve(valid));
+            manageFormRef.value?.validate((valid: any) => resolve(valid));
         });
     }
 });
 
 //通过defineEmits编译器宏生成emit方法
-const emit = defineEmits(['changeShow', 'updateUsername', 'updatePassword', 'userLogin'])
+const emit = defineEmits(['changeShow', 'updateUsername', 'updatePassword', 'manageLogin'])
 
 const showButton = () => {
     emit('changeShow', !props.show)
@@ -43,13 +43,6 @@ const username = ref('')
 
 const password = ref('')
 
-const init = () => {
-    username.value = ''
-    password.value = ''
-}
-
-init()
-
 watch(username, (newUsername) => {
     emit('updateUsername', newUsername)
 })
@@ -58,37 +51,37 @@ watch(password, (newPassword) => {
     emit('updatePassword', newPassword)
 })
 
-//用户登录
-const userLogin = () => {
-    emit('userLogin', 'user')
+//管理员登录
+const manageLogin = () => {
+    emit('manageLogin', 'manage')
 }
 
 </script>
 <template>
     <div class="login">
+        <div class="login_right">
+            <img class="login_top" src="../../../assets/image/login/left.jpg">
+            <div class="login_bottom" @click="showButton">
+                用户登录
+            </div>
+        </div>
         <div class="login_left">
             <h3 class="text_one">
-                用户登录
+                管理员登录
             </h3>
-            <el-form class="form" :rules="rules" :model="loginData" ref="userFormRef">
+            <el-form ref="manageFormRef" class="form" :rules="rules" :model="loginData">
                 <div class="prop">账号</div>
                 <el-form-item prop="username">
-                    <el-input placeholder="请输入账号" v-model="username" clearable />
+                    <el-input v-model="username" placeholder="请输入账号" clearable />
                 </el-form-item>
                 <div class="prop">密码</div>
                 <el-form-item prop="password">
-                    <el-input placeholder="请输入密码" v-model="password" type="password" show-password clearable />
+                    <el-input v-model="password" placeholder="请输入密码" type="password" show-password clearable />
                 </el-form-item>
             </el-form>
-            <el-button class="button" type="primary" @click="userLogin">Login</el-button>
+            <el-button class="button" type="primary" @click="manageLogin">Login</el-button>
             <h3 class="text_two"><router-link to="/register">没有账号？注册一个</router-link> | <router-link
                     to="">忘记密码</router-link></h3>
-        </div>
-        <div class="login_right">
-            <img class="login_top" src="../../../../assets/image/login/right.jpg">
-            <div class="login_bottom" @click="showButton">
-                管理员登录
-            </div>
         </div>
     </div>
 
@@ -119,13 +112,9 @@ const userLogin = () => {
         align-items: center;
         width: 24.5vw;
         height: 35vw;
-        // background-image: url(../../../../assets/bgc.jpg);
-        background-image: linear-gradient(to right,
-                #93ffcb,
-                #c3ffe2);
-
-        background-repeat: no-repeat;
-        background-size: cover;
+        background-image: linear-gradient(to left,
+                #88ccff,
+                #bde8ff);
         border-radius: 2%;
 
         .text_one {
@@ -151,7 +140,6 @@ const userLogin = () => {
             width: 20vw;
             height: 2.5vw;
             font-size: 1.2vw;
-
         }
 
         .text_two {
@@ -168,7 +156,7 @@ const userLogin = () => {
     }
 
     .login_right {
-        margin-left: 1vw;
+        margin-right: 1vw;
         width: 14.5vw;
         height: 35vw;
         border-radius: 2%;
@@ -176,7 +164,6 @@ const userLogin = () => {
         .login_top {
             height: 29.5vw;
             border-radius: 0.3vw;
-            opacity: 0.9;
         }
 
         .login_bottom {
@@ -184,13 +171,13 @@ const userLogin = () => {
             height: 4.5vw;
             line-height: 4.5vw;
             background-image: linear-gradient(to left,
-                    #93ffcb,
-                    #c3ffe2);
+                    #88ccff,
+                    #bde8ff);
             border-radius: 0.3vw;
             font-size: 1.2vw;
             font-weight: 600;
             cursor: pointer;
-            transition: all 0.5s;
+            transition: all 0.3;
 
             &:hover {
                 opacity: 0.8;

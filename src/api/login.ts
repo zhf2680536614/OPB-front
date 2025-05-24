@@ -1,5 +1,5 @@
 import request from '@/utils/request'
-import type { Login } from '@/types/login'
+import type { Login } from '@/types/index'
 
 export const userLogin = (obj: Login) => {
     return request.post("/user/login", obj)

@@ -49,8 +49,8 @@ const updatePassword = (password) => {
     loginData.value.password = password
 }
 
-const userLoginRef = ref<InstanceType<typeof UserLogin>>()
-const manageLoginRef = ref<InstanceType<typeof ManageLogin>>()
+const userLoginRef = ref()
+const manageLoginRef = ref()
 
 
 const login = async (obj) => {
@@ -88,7 +88,7 @@ const login = async (obj) => {
 <template>
     <div class="bgc">
         <div class="wrapper" v-loading="loading">
-            <img src="../../../assets/vue.svg" class="logo wrapper" alt="">
+            <img src="../../assets/vue.svg" class="logo wrapper" alt="">
             <h3 class="text_h3">Green Pluse · 环境保护系统
                 <div class="text_h4">
                     Let the gentle breeze of green blow through the land

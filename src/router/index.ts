@@ -8,12 +8,12 @@ const routes: any[] = [
     {
         path: '/login',
         name: 'login',
-        component: () => import('@/views/front/login/index.vue')
+        component: () => import('@/views/login/index.vue')
     },
     {
         path: '/register',
         name: 'register',
-        component: () => import('@/views/front/register/index.vue')
+        component: () => import('@/views/register/index.vue')
     },
     {
         path: '/front',
@@ -44,12 +44,17 @@ const routes: any[] = [
     {
         name: 'admin',
         path: '/admin',
-        redirect: '/admin/article',
+        component: () => import('@/views/manage/index.vue'),
         children: [
             {
                 name: 'article',
                 path: 'article',
-                component: () => import('@/views/admin/article/index.vue')
+                component: () => import('@/views/manage/article/index.vue'),
+            },
+            {
+                name: 'addArticle',
+                path: 'add',
+                component: () => import('@/views/manage/article/cpns/addArticle.vue')
             }
         ]
     },

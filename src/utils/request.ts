@@ -1,7 +1,7 @@
 import axios, { type AxiosResponse } from 'axios'
 import BaseUrl from '../config/service'
 import { ElMessage } from 'element-plus'
-import type { ApiResponse } from '@/type/ApiResponse'
+import type { ApiResponse } from '@/types/ApiResponse'
 import { loaclCache } from '@/utils/cache'
 import { Authentication, Token } from '@/config/constants/Token'
 import router from '@/router'
@@ -63,6 +63,10 @@ instance.interceptors.response.use(
         // 处理不同类型的错误
         if (error.response) {
             switch (error.response.status) {
+                case 401:
+                    ElMessage.error('登录已过期，请重新登录')
+                    router.push('/login')
+                    break
                 case 404:
                     ElMessage.error('请求的资源不存在')
                     break
@@ -78,8 +82,6 @@ instance.interceptors.response.use(
             ElMessage.error('请求配置错误')
         }
         
-        // 跳转到404页面
-        router.push('/404')
         return Promise.reject(error)
     }
 )

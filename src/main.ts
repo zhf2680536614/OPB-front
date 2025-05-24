@@ -3,7 +3,7 @@ import App from './App.vue'
 import '@/assets/style/global/base.css'
 
 import pinia from './store'
-import router from './router'
+import router from './router/index'
 import 'element-plus/dist/index.css';
 import * as ElementPlusIconsVue from '@element-plus/icons-vue'
 import VLazyImage from 'v-lazy-image'
