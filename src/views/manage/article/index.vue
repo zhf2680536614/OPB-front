@@ -1,8 +1,8 @@
 <script lang="ts" setup>
 import { ref, onMounted } from 'vue'
-import { Plus, Delete, Edit, View } from '@element-plus/icons-vue'
-import { dateEquals, ElMessage, ElMessageBox } from 'element-plus'
-import { manageGetArticleListService } from '@/api/article'
+import { Delete, Edit, View } from '@element-plus/icons-vue'
+import { ElMessage, ElMessageBox } from 'element-plus'
+import { manageGetArticleListService, manageDeleteArticleService } from '@/api/article'
 import type { ArticlePageQuery } from '@/types'
 import { DateUtil } from '@/utils/date'
 import { useArticleStore } from '@/store'
@@ -68,13 +68,18 @@ const handleView = () => {
 }
 
 // 删除文章
-const handleDelete = () => {
+const handleDelete = (id: string) => {
     ElMessageBox.confirm('确定要删除这篇文章吗？', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
-    }).then(() => {
-
+    }).then(async () => {
+        const res = await manageDeleteArticleService(id)
+        if(res.data.code === 1){
+            ElMessage.success("删除成功")
+            pageQuery.value.pageNo = 1
+            loadData()
+        }
     })
 }
 
@@ -178,7 +183,7 @@ onMounted(() => {
                                 <View />
                             </el-icon>查看
                         </el-button>
-                        <el-button type="danger" link>
+                        <el-button type="danger" @click="handleDelete(row.id)" link>
                             <el-icon>
                                 <Delete />
                             </el-icon>删除

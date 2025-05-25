@@ -32,3 +32,10 @@ export const manageUpdateArticleService = (data: Article) => {
         data
     })
 }
+
+export const manageDeleteArticleService = (id: string) => {
+    return request({
+        url: `/manage/article/${id}`,
+        method: 'delete'
+    })
+}
