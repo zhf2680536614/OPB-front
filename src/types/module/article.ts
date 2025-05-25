@@ -11,3 +11,10 @@ export interface ArticlePageQuery {
     startCreateTime: String
     endCreateTime: String
 }
+
+export interface ArticleDto {
+    title: String
+    categoryId: String | Number
+    coverImage: string
+    contentHtml: String
+}

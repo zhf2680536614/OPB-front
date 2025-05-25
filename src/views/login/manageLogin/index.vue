@@ -10,14 +10,6 @@ const props = defineProps({
 
 const manageFormRef = ref()
 
-const validate = () => {
-    return new Promise((resolve) => {
-        manageFormRef.value.validate((valid: any) => {
-            resolve(valid)
-        })
-    })
-}
-
 // 定义暴露的类型
 interface LoginFormExposed {
     validate: () => Promise<boolean>

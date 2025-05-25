@@ -89,30 +89,43 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, computed } from 'vue'
+import { ref, computed, watch } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { HomeFilled, Document, Files, User, Fold, Expand } from '@element-plus/icons-vue'
 
 const router = useRouter()
 const route = useRoute()
-const activeIndex = ref('1')
 const isCollapse = ref(false)
 
+// 根据路由路径设置激活的菜单项
+const activeIndex = computed(() => {
+    const pathMap: Record<string, string> = {
+        '/admin/manage': '1',
+        '/admin/article': '2-1',
+        '/admin/add': '2-2',
+        '/admin/manage/category': '3-1',
+        '/admin/manage/category/add': '3-2',
+        '/admin/manage/user': '4-1',
+        '/admin/manage/user/add': '4-2'
+    }
+    return pathMap[route.path] || '1'
+})
+
 const currentPath = computed(() => {
-  const pathMap: Record<string, string> = {
-    '/admin': '首页',
-    '/admin/article': '文章列表',
-    '/admin/add': '添加文章',
-    '/admin/manage/category': '分类列表',
-    '/admin/manage/category/add': '添加分类',
-    '/admin/manage/user': '用户列表',
-    '/admin/manage/user/add': '添加用户'
-  }
-  return pathMap[route.path] || '未知页面'
+    const pathMap: Record<string, string> = {
+        '/admin/manage': '首页',
+        '/admin/article': '文章列表',
+        '/admin/add': '添加文章',
+        '/admin/manage/category': '分类列表',
+        '/admin/manage/category/add': '添加分类',
+        '/admin/manage/user': '用户列表',
+        '/admin/manage/user/add': '添加用户'
+    }
+    return pathMap[route.path] || '未知页面'
 })
 
 const toggleCollapse = () => {
-  isCollapse.value = !isCollapse.value
+    isCollapse.value = !isCollapse.value
 }
 </script>
 

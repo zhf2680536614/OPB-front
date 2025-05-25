@@ -22,6 +22,8 @@ const pageQuery = ref<ArticlePageQuery>({
 
 // 数据列表
 const articleList = ref()
+const previewImage = ref()
+const previewDialog = ref(false)
 const loading = ref(false)
 const selectedArticles = ref()
 const total = ref(0)
@@ -34,6 +36,11 @@ const loadData = async () => {
     total.value = res.data.data.total
     pageQuery.value.pageNo = res.data.data.pageNo
     loading.value = false
+}
+
+const preview = (image: string) => {
+    previewImage.value = image
+    previewDialog.value = true
 }
 
 // 表格选择变化
@@ -108,13 +115,13 @@ onMounted(() => {
         <el-table v-loading="loading" :data="articleList" @selection-change="handleSelectionChange" border
             style="width: 100%" class="table">
             <el-table-column type="selection" width="55" />
-            <el-table-column prop="id" label="ID" width="80" />
+            <el-table-column type="index" width="80" />
             <el-table-column prop="title" label="文章标题" min-width="200" show-overflow-tooltip />
-            <el-table-column prop="summary" label="文章摘要" min-width="200" show-overflow-tooltip />
+            <el-table-column prop="categoryName" label="文章分类" min-width="200" show-overflow-tooltip />
             <el-table-column label="封面图片" width="100">
                 <template #default="{ row }">
-                    <el-image v-if="row.coverImage" :src="row.coverImage" fit="cover"
-                        style="width: 2.9vw; height: 2.9vw;" />
+                    <el-image v-if="row.coverImage" style="width: 2.9vw; height: 2.9vw; cursor: pointer;" :src="row.coverImage"
+                        show-progress fit="cover" @click="preview(row.coverImage)" />
                     <span v-else>无封面</span>
                 </template>
             </el-table-column>
@@ -146,7 +153,7 @@ onMounted(() => {
                     </el-tag>
                 </template>
             </el-table-column>
-            <el-table-column label="操作" width="200" fixed="right">
+            <el-table-column label="操作" width="200">
                 <template #default="{ row }">
                     <el-button-group>
                         <el-button type="primary" link>
@@ -176,6 +183,11 @@ onMounted(() => {
                 @size-change="handleSizeChange" @current-change="handleCurrentChange" />
         </div>
     </div>
+
+    <el-dialog v-model="previewDialog" class="preview-dialog">
+        <img :src="previewImage">
+    </el-dialog>
+
 </template>
 
 <style lang="less" scoped>
@@ -193,7 +205,6 @@ onMounted(() => {
         top: 0;
         display: flex;
         gap: 0.833vw;
-        z-index: 10;
     }
 
     .table {
@@ -233,5 +244,14 @@ onMounted(() => {
 
 :deep(.el-dialog__body) {
     padding: 1.25vw;
+}
+
+.preview-dialog {
+    width: 30vw;
+    height: 30vw;
+
+    img {
+        object-fit: cover;
+    }
 }
 </style>
