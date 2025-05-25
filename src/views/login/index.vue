@@ -3,7 +3,7 @@ import { ref, watch } from 'vue'
 import UserLogin from './userLogin/index.vue'
 import ManageLogin from './manageLogin/index.vue'
 import { ElMessage,} from 'element-plus'
-import { userLogin, manageLogin } from '@/api/login'
+import { userLoginService, manageLoginService } from '@/api/login'
 import { loaclCache } from '@/utils/cache'
 import { Authentication, Token } from '@/config/constants/Token'
 import { useRouter } from 'vue-router'
@@ -59,7 +59,7 @@ const login = async (obj) => {
         const isValid = await userLoginRef.value?.validate();
         if (isValid) {
             loading.value = true
-            const res = await userLogin(loginData.value)
+            const res = await userLoginService(loginData.value)
             if (res.data.code === 1) {
                 ElMessage.success("登陆成功")
                 loaclCache.setCache(Authentication, res.data.data.authentication)
@@ -73,7 +73,7 @@ const login = async (obj) => {
         const isValid = await manageLoginRef.value?.validate();
         if (isValid) {
             loading.value = true
-            const res = await manageLogin(loginData.value)
+            const res = await manageLoginService(loginData.value)
             if (res.data.code === 1) {
                 ElMessage.success("登陆成功")
                 loaclCache.setCache(Token, res.data.data.token)

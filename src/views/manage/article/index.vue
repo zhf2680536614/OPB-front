@@ -2,9 +2,14 @@
 import { ref, onMounted } from 'vue'
 import { Plus, Delete, Edit, View } from '@element-plus/icons-vue'
 import { dateEquals, ElMessage, ElMessageBox } from 'element-plus'
-import { getArticleList } from '@/api/article'
+import { manageGetArticleListService } from '@/api/article'
 import type { ArticlePageQuery } from '@/types'
 import { DateUtil } from '@/utils/date'
+import { useArticleStore } from '@/store'
+import EditorArticle from './cpns/editorArticle.vue'
+import type { Article } from '@/types'
+
+const articleStore = useArticleStore()
 
 const pageQuery = ref<ArticlePageQuery>({
     pageNo: 1,
@@ -31,7 +36,7 @@ const total = ref(0)
 // 加载数据
 const loadData = async () => {
     loading.value = true
-    const res = await getArticleList(pageQuery.value)
+    const res = await manageGetArticleListService(pageQuery.value)
     articleList.value = res.data.data.list
     total.value = res.data.data.total
     pageQuery.value.pageNo = res.data.data.pageNo
@@ -48,14 +53,13 @@ const handleSelectionChange = (selection: []) => {
     selectedArticles.value = selection
 }
 
-// 新增文章
-const handleAdd = () => {
-    // TODO: 实现新增文章逻辑
-}
+const editorDialog = ref(false)
 
 // 编辑文章
-const handleEdit = () => {
+const handleEdit = (row: Article) => {
     // TODO: 实现编辑文章逻辑
+    articleStore.setArticle(row)
+    editorDialog.value = true
 }
 
 // 查看文章
@@ -92,12 +96,20 @@ const handleCurrentChange = (val: number) => {
     loadData()
 }
 
-
+const editorSuccess = (code: number) => {
+    if (code === 1) {
+        editorDialog.value = false
+        pageQuery.value.pageNo = 1
+        pageQuery.value.pageSize = 10
+        loadData()
+    }
+}
 
 // 初始化加载数据
 onMounted(() => {
     loadData()
 })
+
 </script>
 
 <template>
@@ -120,8 +132,8 @@ onMounted(() => {
             <el-table-column prop="categoryName" label="文章分类" min-width="200" show-overflow-tooltip />
             <el-table-column label="封面图片" width="100">
                 <template #default="{ row }">
-                    <el-image v-if="row.coverImage" style="width: 2.9vw; height: 2.9vw; cursor: pointer;" :src="row.coverImage"
-                        show-progress fit="cover" @click="preview(row.coverImage)" />
+                    <el-image v-if="row.coverImage" style="width: 2.9vw; height: 2.9vw; cursor: pointer;"
+                        :src="row.coverImage" show-progress fit="cover" @click="preview(row.coverImage)" />
                     <span v-else>无封面</span>
                 </template>
             </el-table-column>
@@ -142,21 +154,21 @@ onMounted(() => {
             <el-table-column prop="publishTime" label="发布时间" width="160" />
             <el-table-column label="特殊标记" width="200">
                 <template #default="{ row }">
-                    <el-tag type="danger" class="mx-1">
-                        {{ row.isHot === '1' ? '热门' : '非热' }}
+                    <el-tag :type="row.isHot === 1 ? 'success' : 'danger'" class="mx-1">
+                        {{ row.isHot === 1 ? '热门' : '非热' }}
                     </el-tag>
-                    <el-tag type="warning" class="mx-1">
-                        {{ row.isRecommend === '1' ? '推荐' : '非推' }}
+                    <el-tag :type="row.isRecommend === 1 ? 'success' : 'danger'" class="mx-1">
+                        {{ row.isRecommend === 1 ? '推荐' : '非推' }}
                     </el-tag>
-                    <el-tag type="info" class="mx-1">
-                        {{ row.allowComment === '1' ? '可评' : '禁评' }}
+                    <el-tag :type="row.allowComment === 1 ? 'success' : 'danger'" class="mx-1">
+                        {{ row.allowComment === 1 ? '可评' : '禁评' }}
                     </el-tag>
                 </template>
             </el-table-column>
             <el-table-column label="操作" width="200">
                 <template #default="{ row }">
                     <el-button-group>
-                        <el-button type="primary" link>
+                        <el-button type="primary" @click="handleEdit(row)" link>
                             <el-icon>
                                 <Edit />
                             </el-icon>编辑
@@ -184,13 +196,30 @@ onMounted(() => {
         </div>
     </div>
 
-    <el-dialog v-model="previewDialog" class="preview-dialog">
+    <el-dialog title="图片预览" v-model="previewDialog" class="preview-dialog">
         <img :src="previewImage">
+    </el-dialog>
+
+    <el-dialog title="编辑文章" width="75%" v-model="editorDialog" class="editor-dialog">
+        <EditorArticle @load-data="editorSuccess" />
     </el-dialog>
 
 </template>
 
 <style lang="less" scoped>
+.editor-dialog {
+    width: 100vw;
+}
+
+.preview-dialog {
+    width: 30vw;
+    height: 30vw;
+
+    img {
+        object-fit: cover;
+    }
+}
+
 .article-container {
     position: relative;
     width: 100%;
@@ -244,14 +273,5 @@ onMounted(() => {
 
 :deep(.el-dialog__body) {
     padding: 1.25vw;
-}
-
-.preview-dialog {
-    width: 30vw;
-    height: 30vw;
-
-    img {
-        object-fit: cover;
-    }
 }
 </style>

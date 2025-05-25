@@ -1,10 +1,10 @@
 import request from '@/utils/request'
 import type { Login } from '@/types/index'
 
-export const userLogin = (obj: Login) => {
+export const userLoginService = (obj: Login) => {
     return request.post("/user/login", obj)
 }
 
-export const manageLogin = (obj: Login) => {
+export const manageLoginService = (obj: Login) => {
     return request.post("/manage/login", obj)
 }

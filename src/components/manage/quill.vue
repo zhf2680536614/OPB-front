@@ -1,13 +1,15 @@
 <script lang="ts" setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, watch } from 'vue'
 import { Quill } from '@vueup/vue-quill'
 import 'quill/dist/quill.snow.css'  // 引入 Quill 样式
+import { useArticleStore } from '@/store'
+
+const articleStore = useArticleStore()
 
 const editorRef = ref()
-const contentHtml = ref()
 
-defineExpose({
-    contentHtml
+const props = defineProps({
+    operation: String,
 })
 
 // 处理图片上传
@@ -23,6 +25,21 @@ const handleImageUpload = (file: File) => {
         reader.readAsDataURL(file)
     })
 }
+
+let quill: any = null
+
+watch(
+    () => articleStore.article.contentHtml,
+    (newValue) => {
+        if (quill && newValue !== quill.root.innerHTML) {
+            const range = quill.getSelection()
+            quill.root.innerHTML = newValue
+            if (range) {
+                quill.setSelection(range)
+            }
+        }
+    }
+)
 
 onMounted(() => {
     const toolbarOptions = [
@@ -42,7 +59,7 @@ onMounted(() => {
         ['link', 'image']  // 添加链接和图片功能
     ]
 
-    const quill = new Quill(editorRef.value, {
+    quill = new Quill(editorRef.value, {
         theme: 'snow',
         modules: {
             toolbar: {
@@ -74,6 +91,13 @@ onMounted(() => {
         readOnly: false
     })
 
+    if (props.operation === "editor") {
+        //编辑操作
+        quill.root.innerHTML = articleStore.article.contentHtml
+    } else if (props.operation === 'add') {
+        quill.root.innerHTML = ''
+    }
+
     // 添加图片样式
     const style = document.createElement('style');
     style.textContent = `
@@ -83,8 +107,7 @@ onMounted(() => {
         }
         .ql-editor img:hover {
             outline: 2px solid #1890ff;
-        }
-    `;
+        }`;
     document.head.appendChild(style);
 
     // 使用 MutationObserver 监听图片插入
@@ -138,7 +161,7 @@ onMounted(() => {
 
     // 监听内容变化
     quill.on('text-change', () => {
-        contentHtml.value = quill.root.innerHTML
+        articleStore.article.contentHtml = quill.root.innerHTML
     })
 })
 </script>

@@ -6,7 +6,10 @@ import { Plus } from '@element-plus/icons-vue'
 import { loaclCache } from '@/utils/cache'
 import { Token } from '@/config/constants/Token'
 import type { ArticleDto } from '@/types'
-import { addArticle } from '@/api/article'
+import { manageAddArticleService } from '@/api/article'
+import { useArticleStore } from '@/store'
+
+const articleStore = useArticleStore()
 
 const token = ref(loaclCache.getCache(Token))
 
@@ -20,8 +23,6 @@ const categoryList = ref([
         "label": '动植物资源'
     }
 ])
-
-const contentHtmlRef = ref()
 
 const articleDto = ref<ArticleDto>({
     title: '',
@@ -67,14 +68,16 @@ const commit = async () => {
 
     await formRef.value.validate(async (valid: boolean) => {
         if (valid) {
-            if (contentHtmlRef.value) {
-                articleDto.value.contentHtml = contentHtmlRef.value.contentHtml
-            }
-            if (articleDto.value.contentHtml === '') {
+            if (articleStore.article.contentHtml === '<p><br></p>') {
                 ElMessage.warning('请输入文章内容')
                 return
             }
-            const res = await addArticle(articleDto.value)
+
+            console.log(articleStore.article.contentHtml)
+            
+            articleDto.value.contentHtml = articleStore.article.contentHtml
+
+            const res = await manageAddArticleService(articleDto.value)
             if (res.data.code === 1) {
                 ElMessage.success('上传成功')
             }
@@ -119,7 +122,7 @@ const rules = ref({
             </el-upload>
         </el-form-item>
     </el-form>
-    <Quill ref="contentHtmlRef" :contextHtml="articleDto.contentHtml" />
+    <Quill operation="add" />
     <el-button class="button" type="primary" @click="commit">确认添加</el-button>
 </template>
 
