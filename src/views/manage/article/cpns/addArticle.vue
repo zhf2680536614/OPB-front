@@ -72,8 +72,6 @@ const commit = async () => {
                 ElMessage.warning('请输入文章内容')
                 return
             }
-
-            console.log(articleStore.article.contentHtml)
             
             articleDto.value.contentHtml = articleStore.article.contentHtml
 

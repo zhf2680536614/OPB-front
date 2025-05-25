@@ -26,6 +26,9 @@ importers:
       quill:
         specifier: 1.3.4
         version: 1.3.4
+      quill-image-resize-module:
+        specifier: ^3.0.0
+        version: 3.0.0
       quill-image-resize-module-ts:
         specifier: ^3.0.3
         version: 3.0.3
@@ -1042,11 +1045,17 @@ packages:
   quill-image-resize-module-ts@3.0.3:
     resolution: {integrity: sha512-NMWw67zCfGxE0AyPTVLWMTAs71eKerd+jJJqu9ZuPBGZl7vc+Jtb+tmfx33pC3h0deVYqgOMXYzbFBIRmu/WuQ==}
 
+  quill-image-resize-module@3.0.0:
+    resolution: {integrity: sha512-1TZBnUxU/WIx5dPyVjQ9yN7C6mLZSp04HyWBEMqT320DIq4MW4JgzlOPDZX5ZpBM3bU6sacU4kTLUc8VgYQZYw==}
+
   quill@1.3.4:
     resolution: {integrity: sha512-JNQtAA8jRhFEM1zlpb8Cee/4JHvgdKMWQ0boZJFIsQAH1X0vdAYISsjKPMdI4dOgj1XUG1cSUXeLPxSpoD7Ryg==}
 
   quill@1.3.7:
     resolution: {integrity: sha512-hG/DVzh/TiknWtE6QmWAF/pxoZKYxfe3J/d/+ShUWkDvvkZQVTPeVmUJVu1uE6DDooC4fWTiCLh84ul89oNz5g==}
+
+  raw-loader@0.5.1:
+    resolution: {integrity: sha512-sf7oGoLuaYAScB4VGr0tzetsYlS8EJH6qnTCfQ/WVEa89hALQ4RQfCKt5xCyPQKPDUbVUAIP1QsxAwfAjlDp7Q==}
 
   rc9@2.1.2:
     resolution: {integrity: sha512-btXCnMmRIBINM2LDZoEmOogIZU7Qe7zn4BpomSKZ/ykbLObuBdvG+mFq11DL6fjH1DRwHhrlgtYWG96bJiC7Cg==}
@@ -2208,6 +2217,12 @@ snapshots:
       lodash: 4.17.21
       quill: 1.3.4
 
+  quill-image-resize-module@3.0.0:
+    dependencies:
+      lodash: 4.17.21
+      quill: 1.3.4
+      raw-loader: 0.5.1
+
   quill@1.3.4:
     dependencies:
       clone: 2.1.2
@@ -2225,6 +2240,8 @@ snapshots:
       extend: 3.0.2
       parchment: 1.1.4
       quill-delta: 3.6.3
+
+  raw-loader@0.5.1: {}
 
   rc9@2.1.2:
     dependencies:
