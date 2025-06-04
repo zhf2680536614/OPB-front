@@ -2,12 +2,14 @@
 import { ref, onMounted } from 'vue'
 import { Delete, Edit, View } from '@element-plus/icons-vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
-import { manageGetArticleListService, manageDeleteArticleService } from '@/api/article'
+import { manageGetArticleListService, manageDeleteArticleService, manageBatchDeleteArticleService } from '@/api/article'
 import type { ArticlePageQuery } from '@/types'
-import { DateUtil } from '@/utils/date'
 import { useArticleStore } from '@/store'
 import EditorArticle from './cpns/editorArticle.vue'
 import type { Article } from '@/types'
+import { useRouter } from 'vue-router'
+
+const router = useRouter()
 
 const articleStore = useArticleStore()
 
@@ -30,27 +32,12 @@ const articleList = ref()
 const previewImage = ref()
 const previewDialog = ref(false)
 const loading = ref(false)
-const selectedArticles = ref()
+const selectedArticles = ref<string[]>([])
 const total = ref(0)
-
-// 加载数据
-const loadData = async () => {
-    loading.value = true
-    const res = await manageGetArticleListService(pageQuery.value)
-    articleList.value = res.data.data.list
-    total.value = res.data.data.total
-    pageQuery.value.pageNo = res.data.data.pageNo
-    loading.value = false
-}
 
 const preview = (image: string) => {
     previewImage.value = image
     previewDialog.value = true
-}
-
-// 表格选择变化
-const handleSelectionChange = (selection: []) => {
-    selectedArticles.value = selection
 }
 
 const editorDialog = ref(false)
@@ -62,11 +49,6 @@ const handleEdit = (row: Article) => {
     editorDialog.value = true
 }
 
-// 查看文章
-const handleView = () => {
-
-}
-
 // 删除文章
 const handleDelete = (id: string) => {
     ElMessageBox.confirm('确定要删除这篇文章吗？', '提示', {
@@ -75,7 +57,7 @@ const handleDelete = (id: string) => {
         type: 'warning'
     }).then(async () => {
         const res = await manageDeleteArticleService(id)
-        if(res.data.code === 1){
+        if (res.data.code === 1) {
             ElMessage.success("删除成功")
             pageQuery.value.pageNo = 1
             loadData()
@@ -83,9 +65,36 @@ const handleDelete = (id: string) => {
     })
 }
 
+// 表格选择变化
+const handleSelectionChange = (selection: Article[]) => {
+    selectedArticles.value = []
+    selection.forEach(item => selectedArticles.value.push(item.id))
+    console.log(selectedArticles.value);
+}
+
+// 加载数据
+const loadData = async () => {
+    loading.value = true
+    const res = await manageGetArticleListService(pageQuery.value)
+    articleList.value = res.data.data.list
+    total.value = res.data.data.total
+    loading.value = false
+}
+
 // 批量删除
 const handleBatchDelete = () => {
-
+    ElMessageBox.confirm('确定要删除选中的文章吗？', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+    }).then(async () => {
+        const res = await manageBatchDeleteArticleService(selectedArticles.value)
+        if (res.data.code === 1) {
+            ElMessage.success("删除成功")
+            pageQuery.value.pageNo = 1
+            loadData()
+        }
+    })
 }
 
 // 分页大小变化
@@ -104,7 +113,6 @@ const handleCurrentChange = (val: number) => {
 const editorSuccess = (code: number) => {
     if (code === 1) {
         editorDialog.value = false
-        pageQuery.value.pageNo = 1
         pageQuery.value.pageSize = 10
         loadData()
     }
@@ -121,7 +129,7 @@ onMounted(() => {
     <div class="article-container">
         <!-- 顶部操作栏 -->
         <div class="operation-bar">
-            <el-button type="danger" :disabled="true" @click="handleBatchDelete">
+            <el-button type="danger" :disabled="!selectedArticles.length" @click="handleBatchDelete">
                 <el-icon>
                     <Delete />
                 </el-icon>批量删除
@@ -178,10 +186,16 @@ onMounted(() => {
                                 <Edit />
                             </el-icon>编辑
                         </el-button>
-                        <el-button type="primary" link>
+                        <el-button type="primary" @click="router.push({
+                            name: 'articleDetail',
+                            params: {
+                                type: 'manage',
+                                id: row.id
+                            }
+                        })" link>
                             <el-icon>
                                 <View />
-                            </el-icon>查看
+                            </el-icon>预览
                         </el-button>
                         <el-button type="danger" @click="handleDelete(row.id)" link>
                             <el-icon>
@@ -208,7 +222,7 @@ onMounted(() => {
     <el-dialog title="编辑文章" width="75%" v-model="editorDialog" class="editor-dialog">
         <EditorArticle @load-data="editorSuccess" />
     </el-dialog>
-
+    <router-view></router-view>
 </template>
 
 <style lang="less" scoped>

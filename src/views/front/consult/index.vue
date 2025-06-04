@@ -26,6 +26,7 @@ import Footer from '@/components/front/footer.vue';
 <style lang="less" scoped>
 .container {
     position: relative;
+    
 
     .top {
         position: absolute;
@@ -54,6 +55,7 @@ import Footer from '@/components/front/footer.vue';
     .footer {
         position: absolute;
         top: 189vw;
+        width: 100%;
     }
 
 }

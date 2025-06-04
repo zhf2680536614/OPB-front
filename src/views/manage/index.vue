@@ -8,7 +8,7 @@
       </div>
       <el-menu :default-active="activeIndex" class="el-menu-vertical" :collapse="isCollapse"
         background-color="transparent" text-color="rgba(255, 255, 255, 0.65)" active-text-color="#fff">
-        <el-menu-item index="1" @click="router.push('/admin/manage')">
+        <el-menu-item index="1" @click="router.push('/admin/home')">
           <el-icon>
             <HomeFilled />
           </el-icon>
@@ -24,7 +24,7 @@
           </template>
           <el-menu-item index="2-1" @click="router.push('/admin/article')">文章列表</el-menu-item>
           <el-menu-item index="2-2" @click="router.push('/admin/add')">添加文章</el-menu-item>
-       </el-sub-menu>
+        </el-sub-menu>
 
         <el-sub-menu index="3">
           <template #title>
@@ -33,8 +33,7 @@
             </el-icon>
             <span>分类管理</span>
           </template>
-          <el-menu-item index="3-1" @click="router.push('/admin/manage/category')">分类列表</el-menu-item>
-          <el-menu-item index="3-2" @click="router.push('/admin/manage/category/add')">添加分类</el-menu-item>
+          <el-menu-item index="3-1" @click="router.push('/admin/category')">分类列表</el-menu-item>
         </el-sub-menu>
 
         <el-sub-menu index="4">
@@ -44,8 +43,7 @@
             </el-icon>
             <span>用户管理</span>
           </template>
-          <el-menu-item index="4-1" @click="router.push('/admin/manage/user')">用户列表</el-menu-item>
-          <el-menu-item index="4-2" @click="router.push('/admin/manage/user/add')">添加用户</el-menu-item>
+          <el-menu-item index="4-1" @click="router.push('/admin/user')">用户列表</el-menu-item>
         </el-sub-menu>
       </el-menu>
       <div class="collapse-btn" @click="toggleCollapse">
@@ -61,7 +59,7 @@
       <div class="header">
         <div class="breadcrumb">
           <el-breadcrumb separator="/">
-            <el-breadcrumb-item :to="{ path: '/admin/manage' }">首页</el-breadcrumb-item>
+            <el-breadcrumb-item :to="{ path: '/admin/home' }">首页</el-breadcrumb-item>
             <el-breadcrumb-item>{{ currentPath }}</el-breadcrumb-item>
           </el-breadcrumb>
         </div>
@@ -89,7 +87,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, computed, watch } from 'vue'
+import { ref, computed } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { HomeFilled, Document, Files, User, Fold, Expand } from '@element-plus/icons-vue'
 
@@ -99,33 +97,30 @@ const isCollapse = ref(false)
 
 // 根据路由路径设置激活的菜单项
 const activeIndex = computed(() => {
-    const pathMap: Record<string, string> = {
-        '/admin/manage': '1',
-        '/admin/article': '2-1',
-        '/admin/add': '2-2',
-        '/admin/manage/category': '3-1',
-        '/admin/manage/category/add': '3-2',
-        '/admin/manage/user': '4-1',
-        '/admin/manage/user/add': '4-2'
-    }
-    return pathMap[route.path] || '1'
+  const pathMap: Record<string, string> = {
+    '/admin/home': '1',
+    '/admin/article': '2-1',
+    '/admin/add': '2-2',
+    '/admin/category': '3-1',
+    '/admin/user': '4-1',
+  }
+  return pathMap[route.path] || '1'
 })
 
 const currentPath = computed(() => {
-    const pathMap: Record<string, string> = {
-        '/admin/manage': '首页',
-        '/admin/article': '文章列表',
-        '/admin/add': '添加文章',
-        '/admin/manage/category': '分类列表',
-        '/admin/manage/category/add': '添加分类',
-        '/admin/manage/user': '用户列表',
-        '/admin/manage/user/add': '添加用户'
-    }
-    return pathMap[route.path] || '未知页面'
+  const pathMap: Record<string, string> = {
+    '/admin/home': '首页',
+    '/admin/article': '文章列表',
+    '/admin/add': '添加文章',
+    '/admin/category': '分类列表',
+    '/admin/user': '用户列表',
+    '/admin/articleDetail/**': '文章预览'
+  }
+  return pathMap[route.path] || '文章预览'
 })
 
 const toggleCollapse = () => {
-    isCollapse.value = !isCollapse.value
+  isCollapse.value = !isCollapse.value
 }
 </script>
 
@@ -171,6 +166,7 @@ const toggleCollapse = () => {
       }
 
       .el-menu-vertical {
+
         :deep(.el-menu-item),
         :deep(.el-sub-menu__title) {
           padding: 0 1.042vw;
@@ -233,17 +229,39 @@ const toggleCollapse = () => {
         border-radius: 0.417vw;
         padding: 0 0.833vw;
         transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        position: relative;
+        overflow: hidden;
+
+        &::before {
+          content: '';
+          position: absolute;
+          left: 0;
+          top: 0;
+          bottom: 0;
+          width: 0.104vw;
+          background: linear-gradient(to bottom, #1890ff, #36a3ff);
+          opacity: 0;
+          transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
 
         &:hover {
           background: rgba(255, 255, 255, 0.08) !important;
           color: #fff !important;
           transform: translateX(0.208vw);
+
+          &::before {
+            opacity: 1;
+          }
         }
 
         &.is-active {
           background: linear-gradient(90deg, #1890ff 0%, #36a3ff 100%) !important;
           color: #fff !important;
           box-shadow: 0 0.208vw 0.625vw rgba(24, 144, 255, 0.3);
+
+          &::before {
+            opacity: 1;
+          }
         }
 
         .el-icon {
@@ -260,10 +278,28 @@ const toggleCollapse = () => {
         border-radius: 0.417vw;
         padding: 0 0.833vw;
         transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        position: relative;
+        overflow: hidden;
+
+        &::before {
+          content: '';
+          position: absolute;
+          left: 0;
+          top: 0;
+          bottom: 0;
+          width: 0.104vw;
+          background: linear-gradient(to bottom, #1890ff, #36a3ff);
+          opacity: 0;
+          transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
 
         &:hover {
           background: rgba(255, 255, 255, 0.08) !important;
           color: #fff !important;
+
+          &::before {
+            opacity: 1;
+          }
         }
 
         .el-icon {
@@ -299,11 +335,13 @@ const toggleCollapse = () => {
       transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
       color: rgba(255, 255, 255, 0.65);
       backdrop-filter: blur(0.208vw);
+      border: 0.052vw solid rgba(255, 255, 255, 0.1);
 
       &:hover {
         background: rgba(255, 255, 255, 0.15);
         color: #fff;
         transform: translateX(-50%) scale(1.1);
+        border-color: rgba(255, 255, 255, 0.2);
       }
 
       .el-icon {
@@ -323,6 +361,7 @@ const toggleCollapse = () => {
     flex-direction: column;
     transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     margin-left: 0;
+    background: #f0f2f5;
 
     &.is-collapsed {
       margin-left: 0;
@@ -336,15 +375,32 @@ const toggleCollapse = () => {
       align-items: center;
       justify-content: space-between;
       padding: 0 1.25vw;
+      position: relative;
+      z-index: 1;
+
+      &::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: 0.052vw;
+        background: linear-gradient(90deg, rgba(24, 144, 255, 0.1) 0%, rgba(24, 144, 255, 0) 100%);
+      }
 
       .breadcrumb {
         :deep(.el-breadcrumb__item) {
           .el-breadcrumb__inner {
             color: #666;
             font-weight: normal;
+            transition: all 0.3s ease;
 
             &.is-link {
               color: #1890ff;
+
+              &:hover {
+                color: #36a3ff;
+              }
             }
           }
         }
@@ -355,17 +411,22 @@ const toggleCollapse = () => {
           display: flex;
           align-items: center;
           cursor: pointer;
-          padding: 0 0.417vw;
-          border-radius: 0.208vw;
+          padding: 0.417vw 0.833vw;
+          border-radius: 0.417vw;
           transition: all 0.3s;
+          background: rgba(0, 0, 0, 0.02);
+          border: 0.052vw solid transparent;
 
           &:hover {
-            background: rgba(0, 0, 0, 0.025);
+            background: rgba(24, 144, 255, 0.05);
+            border-color: rgba(24, 144, 255, 0.1);
+            transform: translateY(-0.104vw);
           }
 
           .username {
             margin-left: 0.417vw;
             color: #666;
+            font-weight: 500;
           }
         }
       }
@@ -374,28 +435,26 @@ const toggleCollapse = () => {
     .content {
       flex: 1;
       overflow-y: auto;
-    }
-  }
-}
+      padding: 1.042vw;
+      background: #f0f2f5;
 
-// 响应式设计
-@media screen and (max-width: 768px) {
-  .admin-layout {
-    .sidebar {
-      position: fixed;
-      z-index: 1000;
-      transform: translateX(-100%);
-
-      &.is-collapsed {
-        transform: translateX(0);
+      &::-webkit-scrollbar {
+        width: 0.417vw;
+        height: 0.417vw;
       }
-    }
 
-    .main-content {
-      margin-left: 0 !important;
+      &::-webkit-scrollbar-thumb {
+        background: rgba(0, 0, 0, 0.2);
+        border-radius: 0.208vw;
 
-      &.is-collapsed {
-        margin-left: 0 !important;
+        &:hover {
+          background: rgba(0, 0, 0, 0.3);
+        }
+      }
+
+      &::-webkit-scrollbar-track {
+        background: rgba(0, 0, 0, 0.05);
+        border-radius: 0.208vw;
       }
     }
   }

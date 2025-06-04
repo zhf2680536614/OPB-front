@@ -15,27 +15,6 @@ import {
   Timer
 } from '@element-plus/icons-vue'
 
-const teamMembers = [
-  {
-    name: '张明',
-    position: '环保项目总监',
-    avatar: 'https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png',
-    description: '10年环保行业经验，致力于推动可持续发展'
-  },
-  {
-    name: '李华',
-    position: '技术负责人',
-    avatar: 'https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png',
-    description: '专注于环保技术创新，推动绿色科技发展'
-  },
-  {
-    name: '王芳',
-    position: '社区协调员',
-    avatar: 'https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png',
-    description: '负责社区环保活动组织，促进公众参与'
-  }
-]
-
 const achievements = [
   {
     year: '2023',
@@ -96,28 +75,6 @@ const contactInfo = {
         <p>致力于推动环境保护和可持续发展，通过创新和合作，为下一代创造更美好的环境。</p>
         <h2>我们的愿景</h2>
         <p>成为环保领域的领导者，推动社会各界的环保意识，实现人与自然和谐共处。</p>
-      </div>
-    </el-card>
-
-    <!-- 核心团队 -->
-    <el-card class="team-card">
-      <template #header>
-        <div class="card-header">
-          <el-icon><User /></el-icon>
-          <span>核心团队</span>
-        </div>
-      </template>
-      <div class="team-content">
-        <el-row :gutter="20">
-          <el-col :span="8" v-for="member in teamMembers" :key="member.name">
-            <el-card class="member-card" shadow="hover">
-              <el-avatar :size="100" :src="member.avatar" />
-              <h3>{{ member.name }}</h3>
-              <p class="position">{{ member.position }}</p>
-              <p class="description">{{ member.description }}</p>
-            </el-card>
-          </el-col>
-        </el-row>
       </div>
     </el-card>
 

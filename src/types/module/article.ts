@@ -14,7 +14,7 @@ export interface ArticlePageQuery {
 
 export interface ArticleDto {
     title: String
-    categoryId: String | Number
+    categoryName: String | Number
     coverImage: string
     contentHtml: String
 }
@@ -36,5 +36,6 @@ export interface Article {
     collectCount: string | number,
     isHot: string | number,
     isRecommend: string | number,
-    allowComment: string | number
+    allowComment: string | number,
+    publishTime: string
 }

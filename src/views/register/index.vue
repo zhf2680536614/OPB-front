@@ -31,7 +31,7 @@ const register = () => {
 </script>
 <template>
     <div class="container-top">
-        <img class="logo" src="../../../assets/vue.svg" alt="">
+        <img class="logo" src="../../assets/vue.svg" alt="">
         <div class="text">用户注册</div>
     </div>
     <div class="container-main wrapper">

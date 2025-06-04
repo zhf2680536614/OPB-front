@@ -4,10 +4,10 @@
 
     <div class="top-container">
         <div class="left">
-            <router-link to="consult" active-class="active">环境资讯</router-link>
-            <router-link to="nature" active-class="active">自然风光</router-link>
-            <router-link to="action" active-class="active">采取行动</router-link>
-            <router-link to="about" active-class="active">关于我们</router-link>
+            <router-link to="/front/consult" active-class="active">环境资讯</router-link>
+            <router-link to="/front/nature" active-class="active">自然风光</router-link>
+            <router-link to="/front/action" active-class="active">采取行动</router-link>
+            <router-link to="/front/about" active-class="active">关于我们</router-link>
         </div>
         <div class="center">
             Let the gentle breeze of green blow through the land

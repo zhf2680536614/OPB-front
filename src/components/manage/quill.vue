@@ -10,7 +10,7 @@ const props = defineProps({
 })
 
 const articleStore = useArticleStore()
-const content = ref(props.operation === 'editor' ? articleStore.article.contentHtml : '')
+const content = ref(props.operation == 'editor' ? articleStore.article.contentHtml : '')
 
 // 处理图片上传
 const handleImageUpload = (file: File) => {
@@ -85,8 +85,6 @@ const editorOptions = {
 
 const onEditorChange = (html: string) => {
     articleStore.article.contentHtml = html
-    console.log(articleStore.article.contentHtml);
-
 }
 
 onMounted(() => {
@@ -146,6 +144,7 @@ onMounted(() => {
 
 <template>
     <div class="main-container">
+
         <QuillEditor v-model:content="content" :options="editorOptions" contentType="html"
             @update:content="onEditorChange" class="editor-container" />
     </div>
@@ -176,11 +175,6 @@ onMounted(() => {
         :deep(.ql-editor) {
             min-height: 100%;
             padding: 1vw;
-
-            img {
-                max-width: 100%;
-                cursor: move;
-            }
         }
 
         :deep(.image-resizer) {

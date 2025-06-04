@@ -1,5 +1,12 @@
 <script lang="ts" setup>
-import { ref, watch } from 'vue'
+import { ref, watch, onMounted } from 'vue'
+import { userGetHotArticleService } from '@/api/article'
+import { useRouter } from 'vue-router'
+import type { Article } from '@/types'
+
+const router = useRouter()
+
+const articleList = ref<Article[]>([])
 
 const leftShow = ref(false)
 const rightShow = ref(true)
@@ -14,7 +21,7 @@ watch(movePosition, (newValue) => {
     if (newValue && newValue === 4) {
         leftShow.value = false
         rightShow.value = true
-    } else if (newValue && newValue === 6) {
+    } else if (newValue && newValue === articleList.value.length) {
         leftShow.value = true
         rightShow.value = false
     } else {
@@ -35,7 +42,12 @@ const rightMove = () => {
     movePosition.value = movePosition.value + 1;
 }
 
-const image = ref(new URL("../../../../assets/image/login/right.jpg", import.meta.url).href)
+onMounted(async () => {
+    const res = await userGetHotArticleService()
+    if (res.data.code === 1) {
+        articleList.value = res.data.data
+    }
+})
 
 </script>
 <template>
@@ -45,19 +57,25 @@ const image = ref(new URL("../../../../assets/image/login/right.jpg", import.met
         </div>
         <div class="list">
             <ul ref="ulRef">
-                <li v-for="(item, index) in 6" :key="index">
+                <li v-for="(item, index) in articleList" :key="index">
                     <div class="category">
-                        Water
+                        {{ item.categoryName }}
                     </div>
                     <div class="title">
-                        Association for the Protection of Social Media Content CalendarTell AIDEA
+                        {{ item.title }}
                     </div>
                     <div class="hot">Hot 100+</div>
                     <div class="data">
-                        2025.10.27
+                        {{ item.publishTime }}
                     </div>
-                    <v-lazy-image class="image" :src="image" alt="" />
-                    <div class="button">
+                    <v-lazy-image class="image" :src="item.coverImage" alt="" />
+                    <div class="button" @click="router.push({
+                        name: 'userArticleDetail',
+                        params: {
+                            type: 'user',
+                            id: item.id
+                        }
+                    })">
                         Learn More <el-icon class="icon">
                             <Right />
                         </el-icon>

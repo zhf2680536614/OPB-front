@@ -23,10 +23,11 @@ export const useArticleStore = defineStore(
             isHot: '',
             isRecommend: '',
             allowComment: '',
+            publishTime: ''
         })
 
         //设置文章id
-        const setArticleId = (id:string) => {
+        const setArticleId = (id: string) => {
             article.value.id = id
         }
 

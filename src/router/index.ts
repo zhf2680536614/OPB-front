@@ -1,3 +1,4 @@
+import component from 'element-plus/es/components/tree-select/src/tree-select-option.mjs';
 import { createRouter, createWebHistory } from 'vue-router'
 
 const routes: any[] = [
@@ -39,13 +40,24 @@ const routes: any[] = [
                 name: 'about',
                 component: () => import('@/views/front/about/index.vue')
             },
+            {
+                name: 'userArticleDetail',
+                path: 'articleDetail/:type/:id',
+                component: () => import('@/components/front/articleDetails.vue')
+            }
         ]
     },
     {
         name: 'admin',
         path: '/admin',
         component: () => import('@/views/manage/index.vue'),
+        redirect: '/admin/home',
         children: [
+            {
+                name: 'home',
+                path: 'home',
+                component: () => import('@/views/manage/home/index.vue'),
+            },
             {
                 name: 'article',
                 path: 'article',
@@ -55,7 +67,22 @@ const routes: any[] = [
                 name: 'addArticle',
                 path: 'add',
                 component: () => import('@/views/manage/article/cpns/addArticle.vue')
-            }
+            },
+            {
+                name: 'articleDetail',
+                path: 'articleDetail/:type/:id',
+                component: () => import('@/components/front/articleDetails.vue')
+            },
+            {
+                name: 'category',
+                path: 'category',
+                component: () => import('@/views/manage/category/index.vue')
+            },
+            {
+                name: 'user',
+                path: 'user',
+                component: () => import('@/views/manage/user/index.vue')
+            },
         ]
     },
     {

@@ -1,11 +1,12 @@
 <script lang="ts" setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, watch } from 'vue'
 import { useArticleStore } from '@/store/modules/article';
 import { loaclCache } from '@/utils/cache'
 import { ElMessage } from 'element-plus'
 import { Token } from '@/config/constants/Token'
 import { manageUpdateArticleService } from '@/api/article'
 const token = ref(loaclCache.getCache(Token))
+import { userGetArticleCategoryService } from '@/api/dataDictionary'
 
 const articleStore = useArticleStore()
 
@@ -29,14 +30,14 @@ const handleUploadError = (error: any) => {
 
 const beforeUpload = (file: File) => {
     const isImage = file.type.startsWith('image/')
-    const isLt2M = file.size / 1024 / 1024 < 5
+    const isLt2M = file.size / 1024 / 1024 < 2
 
     if (!isImage) {
         ElMessage.error('只能上传图片文件!')
         return false
     }
     if (!isLt2M) {
-        ElMessage.error('图片大小不能超过 5MB!')
+        ElMessage.error('图片大小不能超过 2MB!')
         return false
     }
     return true
@@ -44,10 +45,16 @@ const beforeUpload = (file: File) => {
 
 const emit = defineEmits(['load-data'])
 
+const tempId = ref()
+
 const commit = async () => {
     await formRef.value.validate(
         async (valid: boolean) => {
             if (valid) {
+                if (articleStore.article.categoryId === articleStore.article.categoryName) {
+                    //说明文章类型没有更改
+                    articleStore.article.categoryId = tempId.value
+                }
                 const res = await manageUpdateArticleService(articleStore.article)
                 if (res.data.code === 1) {
                     ElMessage.success("修改成功")
@@ -58,16 +65,9 @@ const commit = async () => {
     )
 }
 
-const categoryList = ref([
-    {
-        "value": 1,
-        "label": '水资源'
-    },
-    {
-        "value": 2,
-        "label": '动植物资源'
-    }
-])
+const categoryList = ref<any[]>([])
+
+const categoryFlag = ref(false)
 
 const auditList = ref([
     {
@@ -110,7 +110,7 @@ const rules = ref({
     title: [
         { required: true, message: '请输入文章标题', trigger: 'blur' }
     ],
-    categoryId: [
+    categoryName: [
         { required: true, message: '请选择文章类型', trigger: 'blur' }
     ],
     audit: [
@@ -126,6 +126,18 @@ const rules = ref({
         { required: true, message: '请选择文章封面', trigger: 'blur' }
     ],
 })
+
+const loadArticleCategory = async () => {
+    const res = await userGetArticleCategoryService()
+    if (res.data.code === 1) {
+        categoryList.value = res.data.data
+        categoryFlag.value = true
+    }
+}
+
+onMounted(() => {
+    loadArticleCategory()
+})
 </script>
 <template>
     <el-form ref="formRef" class="form" :model="articleStore.article" :rules="rules">
@@ -133,9 +145,9 @@ const rules = ref({
             <el-input v-model="articleStore.article.title" placeholder="请输入文章标题">
             </el-input>
         </el-form-item>
-        <el-form-item label="文章类型" prop="categoryId">
-            <el-select v-model="articleStore.article.categoryId" placeholder="请选择文章类型">
-                <el-option v-for="(item, index) in categoryList" :key="index" :label="item.label" :value="item.value" />
+        <el-form-item label="文章类型" prop="categoryName">
+            <el-select v-model="articleStore.article.categoryName" placeholder="请选择文章类型">
+                <el-option v-for="(item, index) in categoryList" :key="index" :label="item.label" :value="item.label" />
             </el-select>
         </el-form-item>
         <el-form-item label="文章审核" prop="audit">

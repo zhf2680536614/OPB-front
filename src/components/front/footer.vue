@@ -57,8 +57,10 @@
     </div>
 </template>
 <style lang="less" scoped>
+li{
+    list-style: none;
+}
 .footer {
-    width: 100vw;
     height: 15vw;
     background-color: #F5F5F5;
 

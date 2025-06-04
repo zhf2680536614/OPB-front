@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import Quill from '@/components/manage/quill.vue'
 import { ElMessage } from 'element-plus'
 import { Plus } from '@element-plus/icons-vue'
@@ -8,25 +8,17 @@ import { Token } from '@/config/constants/Token'
 import type { ArticleDto } from '@/types'
 import { manageAddArticleService } from '@/api/article'
 import { useArticleStore } from '@/store'
+import { userGetArticleCategoryService } from '@/api/dataDictionary'
 
 const articleStore = useArticleStore()
 
 const token = ref(loaclCache.getCache(Token))
 
-const categoryList = ref([
-    {
-        "value": 1,
-        "label": '水资源'
-    },
-    {
-        "value": 2,
-        "label": '动植物资源'
-    }
-])
+const categoryList = ref()
 
 const articleDto = ref<ArticleDto>({
     title: '',
-    categoryId: '',
+    categoryName: '',
     coverImage: '',
     contentHtml: ''
 })
@@ -46,7 +38,7 @@ const handleCoverImageSuccess = (response: any) => {
 
 const handleUploadError = (error: any) => {
     console.error('上传错误:', error)
-    ElMessage.error('上传失败，请检查服务器时间是否正确')
+    ElMessage.error('上传失败，图片大小不能超过 2MB')
 }
 
 const beforeUpload = (file: File) => {
@@ -58,7 +50,7 @@ const beforeUpload = (file: File) => {
         return false
     }
     if (!isLt2M) {
-        ElMessage.error('图片大小不能超过 5MB!')
+        ElMessage.error('图片大小不能超过 2MB!')
         return false
     }
     return true
@@ -72,7 +64,7 @@ const commit = async () => {
                 ElMessage.warning('请输入文章内容')
                 return
             }
-            
+
             articleDto.value.contentHtml = articleStore.article.contentHtml
 
             const res = await manageAddArticleService(articleDto.value)
@@ -87,12 +79,23 @@ const rules = ref({
     title: [
         { required: true, message: '请输入文章标题', trigger: 'blur' }
     ],
-    categoryId: [
+    categoryName: [
         { required: true, message: '请选择文章类型', trigger: 'blur' }
     ],
     coverImage: [
         { required: true, message: '请选择文章封面', trigger: 'blur' }
     ]
+})
+
+const loadArticleCategory = async () => {
+    const res = await userGetArticleCategoryService()
+    if (res.data.code === 1) {
+        categoryList.value = res.data.data
+    }
+}
+
+onMounted(() => {
+    loadArticleCategory()
 })
 </script>
 
@@ -102,9 +105,9 @@ const rules = ref({
             <el-input v-model="articleDto.title" placeholder="请输入文章标题">
             </el-input>
         </el-form-item>
-        <el-form-item label="文章类型" prop="categoryId">
-            <el-select v-model="articleDto.categoryId" placeholder="请选择文章类型">
-                <el-option v-for="(item, index) in categoryList" :key="index" :label="item.label" :value="item.value" />
+        <el-form-item label="文章类型" prop="categoryName">
+            <el-select v-model="articleDto.categoryName" placeholder="请选择文章类型">
+                <el-option v-for="(item, index) in categoryList" :key="index" :label="item.label" :value="item.label" />
             </el-select>
         </el-form-item>
         <el-form-item label="封面图片" prop="coverImage">
